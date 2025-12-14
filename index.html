@@ -19,11 +19,14 @@
     -webkit-user-select: none;
     display: flex;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center;
     position: relative;
+    overflow: hidden;
+    height: 100vh;
+    touch-action: none; /* 彻底禁用触摸行为 */
   }
 
-  /* 主卡片容器 - 调节高度核心样式 */
+  /* 主卡片容器 */
   .main-card {
     width: 100%;
     max-width: 550px;
@@ -35,124 +38,75 @@
     opacity: 0;
     animation: cardFadeIn 1s ease 0.3s forwards;
     z-index: 10;
-    min-height: 500px; /* 新增最小高度，固定卡片基础高度 */
+    min-height: 650px;
     display: flex;
-    flex-direction: column; /* 让内部元素垂直分布，方便自适应高度 */
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+    position: fixed; /* 固定卡片位置，杜绝滑动 */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 
   @keyframes cardFadeIn {
+    from { opacity: 0; transform: translate(-50%, -45%); }
+    to { opacity: 1; transform: translate(-50%, -50%); }
+  }
+
+  /* 图片展示区 */
+  .card-img {
+    padding: 20px;
+    margin: 0 auto;
+    flex-shrink: 0;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: imgFadeIn 1s ease 0.6s forwards;
+    width: 220px;
+  }
+  .card-img img {
+    width: 100%;
+    height: auto;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,255,255,0.2);
+    border: 2px solid rgba(255,255,255,0.3); /* 边框改白色 */
+  }
+  @keyframes imgFadeIn {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
   }
 
-  /* 顶部菜单按钮 */
-  .menu-btn {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    z-index: 999;
-    padding: 10px 18px;
-    border-radius: 10px;
-    border: none;
-    background: rgba(0,0,0,0.8);
-    color: #ffff00;
-    font-size: 16px;
-    cursor: pointer;
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-    text-shadow: 0 0 4px #ffff00;
-    -webkit-tap-highlight-color: transparent;
-    touch-action: manipulation;
-  }
-
-  /* 侧边栏 */
-  .sidebar {
-    position: fixed;
-    top: 0;
-    left: -300px;
-    width: 280px;
-    height: 100vh;
-    background: rgba(0,0,0,0.95);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    z-index: 9998;
-    transition: left 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    padding: 70px 20px 30px;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .sidebar.open {
-    left: 0;
-    box-shadow: 3px 0 20px rgba(0,0,0,0.8);
-  }
-
-  .sidebar h2 {
-    color: #ffff00;
-    font-size: 24px;
-    border-bottom: 1px solid #555;
-    padding-bottom: 15px;
-    margin-bottom: 30px;
-    text-shadow: 0 0 6px #ffff00;
-  }
-
-  .menu-list {
-    list-style: none;
-    padding: 0;
-  }
-
-  .menu-list li {
-    margin: 20px 0;
-  }
-
-  .menu-list a {
-    color: #ffff00;
-    text-decoration: none;
-    font-size: 19px;
-    display: block;
-    padding: 12px;
-    border-radius: 6px;
-    text-shadow: 0 0 3px #ffff00;
-    transition: all 0.2s ease;
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  .menu-list a:hover {
-    background: rgba(255,255,0,0.2);
-    transform: translateX(6px);
-  }
-
-  .overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0,0,0,0.6);
-    z-index: 9997;
-    display: none;
+  /* 北京时间展示 */
+  .card-time {
+    color: #ffffff; /* 时间文字改白色 */
+    font-size: clamp(16px, 4vw, 20px);
+    text-shadow: 0 0 8px #ffffff; /* 文字发光改白色 */
+    margin: 10px 0;
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transform: translateY(20px);
+    animation: timeFadeIn 1s ease 1s forwards;
+    letter-spacing: 4px;
+    padding: 0 10px;
+  }
+  @keyframes timeFadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
-  .overlay.show {
-    display: block;
-    opacity: 1;
-  }
-
-  /* 卡片头部 - 增加内边距增高顶部区域 */
+  /* 卡片头部 */
   .card-header {
-    padding: 90px 20px 60px; /* 原70px 20px 40px，增大上下内边距 */
+    padding: 20px 20px 30px;
     text-align: center;
     background: linear-gradient(135deg, #222, #000);
-    flex-shrink: 0; /* 防止头部被压缩 */
+    flex-shrink: 0;
+    width: 100%;
   }
 
   .card-header h1 {
-    color: #ffff00;
+    color: #ffffff; /* 标题文字改白色 */
     font-size: clamp(24px, 6vw, 32px);
     margin: 12px 0;
-    text-shadow: 0 0 10px #00FFFF, 5px 4px 10px #255;
+    text-shadow: 0 0 10px #ffffff, 5px 4px 10px #255; /* 发光改白色 */
     opacity: 0;
     transform: translateY(20px);
     animation: headerFadeIn 1s ease 0.8s forwards;
@@ -163,18 +117,19 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
-  /* 卡片内容区 - 增加内边距和间距 */
+  /* 卡片内容区 */
   .card-body {
-    padding: 50px 20px; /* 原30px 20px，增大上下内边距 */
+    padding: 40px 20px 50px;
     text-align: center;
-    flex-grow: 1; /* 让内容区占满剩余高度 */
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
-    justify-content: center; /* 内容垂直居中 */
+    justify-content: center;
+    width: 100%;
   }
 
   .btn-group {
-    margin-bottom: 40px; /* 原20px，增大按钮下方间距 */
+    margin-bottom: 40px;
     opacity: 0;
     transform: translateY(20px);
     animation: btnFadeIn 1s ease 1s forwards;
@@ -192,24 +147,26 @@
     border-radius: 12px;
     border: none;
     background: rgba(0,0,0,0.6);
-    color: #fff;
+    color: #ffffff; /* 按钮文字改白色 */
     cursor: pointer;
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
     transition: background 0.2s ease;
     -webkit-tap-highlight-color: transparent;
     min-width: 140px;
+    border: 1px solid rgba(255,255,255,0.3); /* 按钮加白色细边框 */
   }
 
   .card-body button:hover {
-    background: rgba(0,0,0,0.8);
+    background: rgba(255,255,255,0.2);
+    color: #ffffff;
   }
 
-  /* 悬浮可拖动音乐播放器 */
+  /* 音乐播放器 - 调整层级和初始位置 */
   .drag-music-box {
     position: fixed;
     bottom: 30px;
-    right: 20px;
+    right: 30px;
     width: 380px;
     height: 200px;
     z-index: 998;
@@ -233,14 +190,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #ffff00;
+    color: #ffffff; /* 播放器拖动栏文字改白色 */
     font-size: 14px;
     font-weight: 500;
-    text-shadow: 0 0 4px #ffff00;
+    text-shadow: 0 0 4px #ffffff; /* 发光改白色 */
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
     -webkit-tap-highlight-color: transparent;
     border-radius: 8px 8px 0 0;
+    border-bottom: 1px solid rgba(255,255,255,0.3); /* 拖动栏加白色下边框 */
   }
 
   .music-iframe {
@@ -254,32 +212,32 @@
     .drag-music-box {
       width: 320px;
       height: 160px;
+      right: 15px;
+      bottom: 15px;
     }
     .main-card {
-      min-height: 500px; /* 移动端适配更小的最小高度 */
+      min-height: 600px;
+    }
+    .card-img {
+      width: 180px;
+    }
+    .card-time {
+      font-size: 16px;
+      letter-spacing: 3px;
     }
   }
 </style>
 </head>
 <body>
   <div class="main-card">
-    <button class="menu-btn" id="menuBtn">☰ 菜单</button>
-    <div class="sidebar" id="sidebar">
-      <h2>故星工具箱</h2>
-      <ul class="menu-list">
-        <li><a href="https://t.me/GXNB1314" target="_blank">官方频道</a></li>
-        <li><a href="javascript:a2()">工具箱下载</a></li>
-        <li><a href="javascript:wzsy()">网站首页</a></li>
-        <li><a href="javascript:syjc()">使用教程</a></li>
-      </ul>
+    <div class="card-img">
+      <img src="https://pan.tenire.com/view.php/0d760576f5c2fd9ea6688c089cc40fed.jpg" alt="故星展示图">
     </div>
-    <div class="overlay" id="overlay"></div>
-
+    <div class="card-time" id="beijingTime">2025-12-15 04:09:05</div>
     <div class="card-header">
       <h1>故星大王</h1>
       <h1>官方频道@GXNB1314</h1>
     </div>
-
     <div class="card-body">
       <div class="btn-group">
         <button onclick="a1()"> 官方频道 </button>
@@ -294,6 +252,28 @@
   </div>
 
   <script>
+    // 北京时间更新
+    function updateBeijingTime() {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const day = String(now.getDate()).padStart(2, '0');
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const seconds = String(now.getSeconds()).padStart(2, '0');
+      document.getElementById('beijingTime').textContent = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    }
+    updateBeijingTime();
+    setInterval(updateBeijingTime, 1000);
+
+    // 多重禁止滑动
+    document.addEventListener('touchmove', function(e) {
+      e.preventDefault();
+    }, { passive: false });
+    document.addEventListener('scroll', function(e) {
+      e.preventDefault();
+    }, { passive: false });
+
     setTimeout(() => {
       alert("欢迎进入故星的网站\n官方频道@GXNB1314");
     }, 0);
@@ -312,49 +292,8 @@
       link.click();
       document.body.removeChild(link);
     }
-    function syjc(){
-      alert("你点这里干什么😏")
-    }
-    function wzsy(){
-      alert("现在不就是吗😏")
-    }
 
-    const sidebar = document.getElementById('sidebar');
-    const menuBtn = document.getElementById('menuBtn');
-    const overlay = document.getElementById('overlay');
-    let isMenuAnimating = false;
-
-    menuBtn.addEventListener('click', () => {
-      if (isMenuAnimating) return;
-      isMenuAnimating = true;
-      sidebar.classList.toggle('open');
-      overlay.classList.toggle('show');
-      menuBtn.innerHTML = sidebar.classList.contains('open') ? '✕ 关闭' : '☰ 菜单';
-      setTimeout(() => {
-        isMenuAnimating = false;
-      }, 300);
-    });
-
-    overlay.addEventListener('click', () => {
-      if (isMenuAnimating) return;
-      isMenuAnimating = true;
-      sidebar.classList.remove('open');
-      overlay.classList.remove('show');
-      menuBtn.innerHTML = '☰ 菜单';
-      setTimeout(() => {
-        isMenuAnimating = false;
-      }, 300);
-    });
-
-    document.addEventListener('touchstart', (e) => {
-      if (sidebar.classList.contains('open') && !sidebar.contains(e.target) && e.target !== menuBtn) {
-        sidebar.classList.remove('open');
-        overlay.classList.remove('show');
-        menuBtn.innerHTML = '☰ 菜单';
-        isMenuAnimating = false;
-      }
-    });
-
+    // 音乐播放器拖动
     const dragBox = document.getElementById('dragMusicBox');
     const dragHandle = document.getElementById('dragHandle');
     let isDragging = false;
