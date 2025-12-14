@@ -19,11 +19,11 @@
     -webkit-user-select: none;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start; /* 恢复顶部对齐，允许滑动 */
     position: relative;
-    overflow: hidden;
-    height: 100vh;
-    touch-action: none; /* 彻底禁用触摸行为 */
+    overflow: auto; /* 恢复页面滚动 */
+    height: auto; /* 取消固定高度 */
+    touch-action: auto; /* 恢复触摸行为 */
   }
 
   /* 主卡片容器 */
@@ -42,16 +42,12 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    overflow: hidden;
-    position: fixed; /* 固定卡片位置，杜绝滑动 */
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    margin: 20px 0; /* 添加上下外边距，方便滑动展示 */
   }
 
   @keyframes cardFadeIn {
-    from { opacity: 0; transform: translate(-50%, -45%); }
-    to { opacity: 1; transform: translate(-50%, -50%); }
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
   /* 图片展示区 */
@@ -69,7 +65,7 @@
     height: auto;
     border-radius: 15px;
     box-shadow: 0 5px 20px rgba(0,255,255,0.2);
-    border: 2px solid rgba(255,255,255,0.3); /* 边框改白色 */
+    border: 2px solid rgba(255,255,255,0.3);
   }
   @keyframes imgFadeIn {
     from { opacity: 0; transform: translateY(20px); }
@@ -78,9 +74,9 @@
 
   /* 北京时间展示 */
   .card-time {
-    color: #ffffff; /* 时间文字改白色 */
+    color: #ffffff;
     font-size: clamp(16px, 4vw, 20px);
-    text-shadow: 0 0 8px #ffffff; /* 文字发光改白色 */
+    text-shadow: 0 0 8px #ffffff;
     margin: 10px 0;
     opacity: 0;
     transform: translateY(20px);
@@ -103,10 +99,10 @@
   }
 
   .card-header h1 {
-    color: #ffffff; /* 标题文字改白色 */
+    color: #ffffff;
     font-size: clamp(24px, 6vw, 32px);
     margin: 12px 0;
-    text-shadow: 0 0 10px #ffffff, 5px 4px 10px #255; /* 发光改白色 */
+    text-shadow: 0 0 10px #ffffff, 5px 4px 10px #255;
     opacity: 0;
     transform: translateY(20px);
     animation: headerFadeIn 1s ease 0.8s forwards;
@@ -147,14 +143,14 @@
     border-radius: 12px;
     border: none;
     background: rgba(0,0,0,0.6);
-    color: #ffffff; /* 按钮文字改白色 */
+    color: #ffffff;
     cursor: pointer;
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
     transition: background 0.2s ease;
     -webkit-tap-highlight-color: transparent;
     min-width: 140px;
-    border: 1px solid rgba(255,255,255,0.3); /* 按钮加白色细边框 */
+    border: 1px solid rgba(255,255,255,0.3);
   }
 
   .card-body button:hover {
@@ -162,9 +158,9 @@
     color: #ffffff;
   }
 
-  /* 音乐播放器 - 调整层级和初始位置 */
+  /* 音乐播放器 */
   .drag-music-box {
-    position: fixed;
+    position: fixed; /* 播放器仍固定，不随滚动移动 */
     bottom: 30px;
     right: 30px;
     width: 380px;
@@ -173,8 +169,6 @@
     opacity: 0;
     animation: musicFadeIn 1s ease 1.5s forwards;
     touch-action: none;
-    top: auto;
-    left: auto;
   }
 
   @keyframes musicFadeIn {
@@ -190,15 +184,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #ffffff; /* 播放器拖动栏文字改白色 */
+    color: #ffffff;
     font-size: 14px;
     font-weight: 500;
-    text-shadow: 0 0 4px #ffffff; /* 发光改白色 */
+    text-shadow: 0 0 4px #ffffff;
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
     -webkit-tap-highlight-color: transparent;
     border-radius: 8px 8px 0 0;
-    border-bottom: 1px solid rgba(255,255,255,0.3); /* 拖动栏加白色下边框 */
+    border-bottom: 1px solid rgba(255,255,255,0.3);
   }
 
   .music-iframe {
@@ -235,7 +229,7 @@
     </div>
     <div class="card-time" id="beijingTime">2025-12-15 04:09:05</div>
     <div class="card-header">
-      <h1>故星免root内核官网</h1>
+      <h1>故星验证网页</h1>
       <h1>官方频道@GXNB1314</h1>
     </div>
     <div class="card-body">
@@ -266,16 +260,9 @@
     updateBeijingTime();
     setInterval(updateBeijingTime, 1000);
 
-    // 多重禁止滑动
-    document.addEventListener('touchmove', function(e) {
-      e.preventDefault();
-    }, { passive: false });
-    document.addEventListener('scroll', function(e) {
-      e.preventDefault();
-    }, { passive: false });
-
+    // 移除所有禁止滑动的事件监听
     setTimeout(() => {
-      alert("欢迎使用故星免root内核\n官方频道@GXNB1314");
+      alert("欢迎进入\n官方频道@GXNB1314");
     }, 0);
     
     function a1(){
@@ -283,10 +270,10 @@
     }
 
     function a2(){
-      const fileUrl = 'bdzy/YGX.sh';
+      const fileUrl = 'bdzy/NoRootKernel.sh';
       const link = document.createElement('a');
       link.href = fileUrl;
-      link.download = '云更新版本.sh';
+      link.download = '免root内核.sh';
       link.style.display = 'none';
       document.body.appendChild(link);
       link.click();
