@@ -10,6 +10,9 @@
         body.light{background:#f5f5f5;color:#333;}
         .toggle-btn{position:fixed;top:20px;right:20px;padding:8px 16px;border:none;border-radius:20px;background:#4fc3f7;color:#1a1a1a;cursor:pointer;font-weight:bold;transition:background 0.3s ease;z-index:999;}
         .toggle-btn:hover{background:#29b6f6;}
+        /* 实时时间样式 */
+        .real-time{position:fixed;top:20px;left:20px;padding:8px 16px;border-radius:20px;background:#2d2d2d;color:#4fc3f7;font-size:14px;z-index:999;border:1px solid #444;}
+        body.light .real-time{background:#fff;color:#2196f3;border-color:#ddd;}
         .container{max-width:800px;margin:0 auto;padding:0 20px;}
         .header{text-align:center;margin:40px 0 60px;}
         .header h1{font-size:36px;color:#4fc3f7;margin-bottom:10px;}
@@ -36,11 +39,11 @@
         body.light .modal-content{background:#fff;}
         .modal-content p{margin-bottom:20px;font-size:18px;}
         .modal-content button{padding:8px 20px;background:#4fc3f7;color:#1a1a1a;border:none;border-radius:5px;cursor:pointer;}
-        /* 隐藏音频元素 完全静默 */
-        audio{display:none !important;}
     </style>
 </head>
 <body>
+    <!-- 实时时间展示 -->
+    <div class="real-time" id="realTime">加载中...</div>
     <button class="toggle-btn" onclick="toggleMode()">切换浅色模式</button>
     <div class="container">
         <div class="header">
@@ -55,7 +58,7 @@
                 <span>更新时间：2025-12-29</span>
             </div>
             <p class="card-desc">个人感觉比较黑客 百分百有效果</p>
-            <button class="download-btn" onclick="downloadFile('bdzy/gx.sh')">立即下载</button>
+            <button class="download-btn" onclick="downloadFile('/bdzy/gx.sh')">立即下载</button>
         </div>
 
         <div class="tool-card" draggable="false">
@@ -87,16 +90,35 @@
         </div>
     </div>
 
-    <!-- 后台静默播放音频 无界面无控制 -->
-    <audio id="bgMusic" src="/音乐/a.mp3" loop autoplay preload="auto">
-
     <script>
+        // 实时时间更新函数
+        function updateRealTime() {
+            const now = new Date();
+            // 格式化时间：年-月-日 时:分:秒
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            const timeStr = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+            document.getElementById('realTime').textContent = timeStr;
+        }
+
+        // 页面加载时立即执行，之后每秒更新一次
+        window.onload = function() {
+            updateRealTime();
+            setInterval(updateRealTime, 1000);
+        };
+
+        // 浅色/深色模式切换
         function toggleMode(){
             document.body.classList.toggle('light');
             const btn = document.querySelector('.toggle-btn');
             btn.textContent = document.body.classList.contains('light') ? '切换深色模式' : '切换浅色模式';
         }
 
+        // 下载弹窗逻辑
         function downloadFile(url){
             const modal = document.getElementById('downloadModal');
             modal.classList.add('show');
@@ -111,14 +133,6 @@
 
         function closeModal(){
             document.getElementById('downloadModal').classList.remove('show');
-        }
-
-        // 页面加载后强制播放 适配浏览器自动播放策略
-        window.onload = function() {
-            const audio = document.getElementById('bgMusic');
-            audio.play().catch(err => {
-                // 静默失败 无提示
-            });
         }
     </script>
 </body>
