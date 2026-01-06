@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HNR容器官方网站</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;user-select:none;}
+        body{font-family:Arial, sans-serif;background:#1a1a1a;color:#fff;min-height:100vh;padding:20px 0;transition:background 0.3s ease, color 0.3s ease;}
+        body.light{background:#f5f5f5;color:#333;}
+        .toggle-btn{position:fixed;top:20px;right:20px;padding:8px 16px;border:none;border-radius:20px;background:#4fc3f7;color:#1a1a1a;cursor:pointer;font-weight:bold;transition:background 0.3s ease;z-index:999;}
+        .toggle-btn:hover{background:#29b6f6;}
+        .container{max-width:800px;margin:0 auto;padding:0 20px;}
+        .header{text-align:center;margin:40px 0 60px;}
+        .header h1{font-size:36px;color:#4fc3f7;margin-bottom:10px;}
+        .header p{font-size:16px;color:#ccc;}
+        body.light .header p{color:#666;}
+        .tool-card{background:#2d2d2d;border-radius:12px;padding:30px;margin-bottom:30px;transition:transform 0.3s ease,box-shadow 0.3s ease;border:1px solid #444;}
+        body.light .tool-card{background:#fff;border-color:#ddd;}
+        .tool-card:hover{transform:translateY(-5px);box-shadow:0 10px 25px rgba(0,0,0,0.4);}
+        body.light .tool-card:hover{box-shadow:0 10px 25px rgba(0,0,0,0.15);}
+        .card-title{font-size:24px;margin-bottom:10px;color:#4fc3f7;border-bottom:2px solid #4fc3f7;padding-bottom:10px;}
+        .card-meta{font-size:14px;color:#888;margin-bottom:15px;display:flex;justify-content:space-between;}
+        body.light .card-meta{color:#999;}
+        .card-desc{font-size:16px;color:#ccc;line-height:1.6;margin-bottom:25px;}
+        body.light .card-desc{color:#666;}
+        .download-btn,.jump-btn{display:block;width:100%;padding:15px 0;text-align:center;text-decoration:none;border-radius:8px;font-weight:bold;transition:background 0.3s ease;font-size:18px;cursor:pointer;border:none;}
+        .download-btn{background:#4fc3f7;color:#1a1a1a;}
+        .download-btn:hover{background:#29b6f6;}
+        .jump-btn{background:#2196f3;color:#fff;}
+        .jump-btn:hover{background:#1976d2;}
+        /* 弹窗样式 */
+        .modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);display:flex;justify-content:center;align-items:center;z-index:9999;opacity:0;visibility:hidden;transition:all 0.3s ease;}
+        .modal.show{opacity:1;visibility:visible;}
+        .modal-content{background:#2d2d2d;padding:30px 50px;border-radius:10px;text-align:center;}
+        body.light .modal-content{background:#fff;}
+        .modal-content p{margin-bottom:20px;font-size:18px;}
+        .modal-content button{padding:8px 20px;background:#4fc3f7;color:#1a1a1a;border:none;border-radius:5px;cursor:pointer;}
+        /* 隐藏音频元素 完全静默 */
+        audio{display:none !important;}
+    </style>
+</head>
+<body>
+    <button class="toggle-btn" onclick="toggleMode()">切换浅色模式</button>
+    <div class="container">
+        <div class="header">
+            <h1>HNR容器官方网站</h1>
+            <p>专业安卓游戏辅助工具 | 高效稳定</p>
+        </div>
+
+        <div class="tool-card" draggable="false">
+            <h2 class="card-title">故星PUBGM清理</h2>
+            <div class="card-meta">
+                <span>版本号：v4.0修复版</span>
+                <span>更新时间：2025-12-29</span>
+            </div>
+            <p class="card-desc">个人感觉比较黑客 百分百有效果</p>
+            <button class="download-btn" onclick="downloadFile('bdzy/gx.sh')">立即下载</button>
+        </div>
+
+        <div class="tool-card" draggable="false">
+            <h2 class="card-title">HNR_湖南人容器</h2>
+            <div class="card-meta">
+                <span>版本号：v1.0</span>
+                <span>更新时间：2026-01-07</span>
+            </div>
+            <p class="card-desc">一款诞生于4.1.0版本的辅助，经历一个赛季的打磨也是决定我要认真做这个项目了</p>
+            <button class="download-btn" onclick="downloadFile('/文件/容器.apk')">立即下载</button>
+        </div>
+
+        <div class="tool-card" draggable="false">
+            <h2 class="card-title">官方频道</h2>
+            <div class="card-meta">
+                <span>频道状态：持续更新</span>
+                <span>最新通知：自己去看</span>
+            </div>
+            <p class="card-desc">官方频道@GXNB1314 官方频道@HNRNB8</p>
+            <a href="https://t.me/HNRNB8" class="jump-btn" target="_blank" draggable="false">立即跳转</a>
+        </div>
+    </div>
+
+    <!-- 弹窗 -->
+    <div class="modal" id="downloadModal">
+        <div class="modal-content">
+            <p>正在准备下载，请稍候...</p>
+            <button onclick="closeModal()">确定</button>
+        </div>
+    </div>
+
+    <!-- 后台静默播放音频 无界面无控制 -->
+    <audio id="bgMusic" src="/音乐/a.mp3" loop autoplay preload="auto">
+
+    <script>
+        function toggleMode(){
+            document.body.classList.toggle('light');
+            const btn = document.querySelector('.toggle-btn');
+            btn.textContent = document.body.classList.contains('light') ? '切换深色模式' : '切换浅色模式';
+        }
+
+        function downloadFile(url){
+            const modal = document.getElementById('downloadModal');
+            modal.classList.add('show');
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = '';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            setTimeout(() => modal.classList.remove('show'), 3000);
+        }
+
+        function closeModal(){
+            document.getElementById('downloadModal').classList.remove('show');
+        }
+
+        // 页面加载后强制播放 适配浏览器自动播放策略
+        window.onload = function() {
+            const audio = document.getElementById('bgMusic');
+            audio.play().catch(err => {
+                // 静默失败 无提示
+            });
+        }
+    </script>
+</body>
+</html>
