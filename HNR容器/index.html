@@ -108,7 +108,13 @@ gap: 10px;
 width: 24px;
 height: 24px;
 border-radius: 4px;
-object-fit: cover; /* 确保图片填满图标区域 */
+object-fit: cover;
+background-color: #f5f5f5; /* 图片加载失败时的背景色 */
+display: flex;
+align-items: center;
+justify-content: center;
+color: #999;
+font-size: 10px;
 }
 .file-name {
 font-size: 14px;
@@ -131,6 +137,28 @@ transition: 0.2s;
 }
 .download-btn:hover {
 background-color: #5a4dbf;
+}
+.download-btn:disabled {
+background-color: #ccc;
+cursor: not-allowed;
+}
+/* 下载提示弹窗 */
+.toast {
+position: fixed;
+bottom: 30px;
+left: 50%;
+transform: translateX(-50%);
+background-color: rgba(0,0,0,0.7);
+color: #fff;
+padding: 8px 16px;
+border-radius: 4px;
+font-size: 12px;
+opacity: 0;
+transition: opacity 0.3s;
+pointer-events: none;
+}
+.toast.show {
+opacity: 1;
 }
 </style>
 </head>
@@ -166,38 +194,68 @@ background-color: #5a4dbf;
 <div class="file-list">
 <div class="file-item">
 <div class="file-left">
-<img class="file-icon" src="http://117.72.64.167:1080/f/XQFw/GXBB.png" alt="图标1">
+<!-- 图片加载失败时显示"A"占位 -->
+<img class="file-icon" src="/HNR容器/A.png" alt="图标1" onload="this.style.display='flex'" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+<span class="file-icon" style="display: none;">A</span>
 <span class="file-name">HNR A版.apk</span>
 <span class="file-size">此版本有追踪</span>
 </div>
-<!-- 点击下载 /HNR容器/A.apk -->
-<button class="download-btn" onclick="downloadFile('/HNR容器/A.apk')">下载</button>
+<button class="download-btn" onclick="downloadFile('/HNR容器/A.apk', 'HNR A版.apk')">下载</button>
 </div>
 
 <div class="file-item">
 <div class="file-left">
-<img class="file-icon" src="http://117.72.64.167:1080/f/rQf7/gz.png" alt="图标2">
+<!-- 图片加载失败时显示"B"占位 -->
+<img class="file-icon" src="/HNR容器/B.png" alt="图标2" onload="this.style.display='flex'" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+<span class="file-icon" style="display: none;">B</span>
 <span class="file-name">HNR B版.apk</span>
 <span class="file-size">此版本有秒刷新美化</span>
 </div>
-<!-- 点击下载 /HNR容器/B.apk -->
-<button class="download-btn" onclick="downloadFile('/HNR容器/B.apk')">下载</button>
+<button class="download-btn" onclick="downloadFile('/HNR容器/B.apk', 'HNR B版.apk')">下载</button>
 </div>
 </div>
 </div>
 </div>
 
+<!-- 下载提示弹窗 -->
+<div class="toast" id="downloadToast"></div>
+
 <script>
-// 触发文件下载的函数
-function downloadFile(filePath) {
+const toast = document.getElementById('downloadToast');
+
+// 触发文件下载的函数（添加文件名和状态提示）
+function downloadFile(filePath, fileName) {
+// 显示下载中提示
+showToast(`正在下载 ${fileName}...`);
+
 // 创建隐藏的a标签实现下载
 const a = document.createElement('a');
 a.href = filePath;
-a.download = filePath.split('/').pop(); // 自动获取文件名
+a.download = fileName; // 自定义下载文件名
 a.style.display = 'none';
 document.body.appendChild(a);
-a.click();
+
+// 下载成功/失败监听
+a.addEventListener('load', () => {
+showToast(`${fileName} 下载成功！`);
 document.body.removeChild(a);
+});
+
+a.addEventListener('error', () => {
+showToast(`${fileName} 下载失败，请检查文件路径！`);
+document.body.removeChild(a);
+});
+
+a.click();
+}
+
+// 显示提示弹窗
+function showToast(message) {
+toast.textContent = message;
+toast.classList.add('show');
+setTimeout(() => {
+toast.classList.remove('show');
+}, 2000);
 }
 </script>
 </body>
