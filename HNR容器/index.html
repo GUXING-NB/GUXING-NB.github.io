@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HNR官方网站</title>
+<style>
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+font-family: "Microsoft YaHei", sans-serif;
+}
+body {
+background-color: #6c5ce7;
+display: flex;
+justify-content: center;
+align-items: center;
+min-height: 100vh;
+padding: 20px;
+}
+.main-box {
+background-color: #fff;
+width: 100%;
+max-width: 700px;
+border-radius: 16px;
+overflow: hidden;
+box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+}
+.top-bar {
+background-color: #6c5ce7;
+padding: 12px 20px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+color: #fff;
+font-size: 14px;
+}
+.top-bar .left {
+display: flex;
+align-items: center;
+gap: 8px;
+}
+.top-bar .right {
+display: flex;
+align-items: center;
+gap: 12px;
+color: #eee;
+font-size: 12px;
+}
+.card-content {
+padding: 30px 25px;
+text-align: center;
+}
+.app-icon {
+width: 70px;
+height: 70px;
+background: linear-gradient(135deg, #a8e6cf, #dcedc1);
+border-radius: 16px;
+margin: 0 auto 12px;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 24px;
+color: #fff;
+font-weight: bold;
+}
+.app-name {
+font-size: 24px;
+font-weight: bold;
+color: #333;
+margin-bottom: 6px;
+}
+.app-desc {
+font-size: 13px;
+color: #666;
+margin-bottom: 20px;
+line-height: 1.4;
+}
+.path-bar {
+background-color: #f8f9fa;
+border-radius: 8px;
+padding: 10px 15px;
+text-align: left;
+font-size: 13px;
+color: #6c5ce7;
+margin-bottom: 25px;
+}
+.file-list {
+width: 100%;
+}
+.file-item {
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 14px 10px;
+border-bottom: 1px solid #eee;
+}
+.file-item:last-child {
+border-bottom: none;
+}
+.file-left {
+display: flex;
+align-items: center;
+gap: 10px;
+}
+.file-icon {
+width: 24px;
+height: 24px;
+border-radius: 4px;
+object-fit: cover; /* 确保图片填满图标区域 */
+}
+.file-name {
+font-size: 14px;
+color: #333;
+}
+.file-size {
+font-size: 12px;
+color: #999;
+margin-left: 10px;
+}
+.download-btn {
+background-color: #6c5ce7;
+color: #fff;
+border: none;
+border-radius: 6px;
+padding: 6px 14px;
+font-size: 12px;
+cursor: pointer;
+transition: 0.2s;
+}
+.download-btn:hover {
+background-color: #5a4dbf;
+}
+</style>
+</head>
+<body>
+<div class="main-box">
+<!-- 顶部栏 -->
+<div class="top-bar">
+<div class="left">
+<span>📂</span>
+<span>HNR官方网站</span>
+</div>
+<div class="right">
+<span>↻</span>
+<span>◀</span>
+<span>▶</span>
+<span>🏠</span>
+<span>☰</span>
+</div>
+</div>
+
+<!-- 内容卡片 -->
+<div class="card-content">
+<div class="app-icon">HNR</div>
+<div class="app-name">HNR</div>
+<div class="app-desc">HNR官方正式版 稳定直装 官方下载</div>
+
+<!-- 路径栏 -->
+<div class="path-bar">
+根目录 / HNR
+</div>
+
+<!-- 文件列表 -->
+<div class="file-list">
+<div class="file-item">
+<div class="file-left">
+<img class="file-icon" src="http://117.72.64.167:1080/f/XQFw/GXBB.png" alt="图标1">
+<span class="file-name">HNR A版.apk</span>
+<span class="file-size">此版本有追踪</span>
+</div>
+<!-- 点击下载 /HNR容器/A.apk -->
+<button class="download-btn" onclick="downloadFile('/HNR容器/A.apk')">下载</button>
+</div>
+
+<div class="file-item">
+<div class="file-left">
+<img class="file-icon" src="http://117.72.64.167:1080/f/rQf7/gz.png" alt="图标2">
+<span class="file-name">HNR B版.apk</span>
+<span class="file-size">此版本有秒刷新美化</span>
+</div>
+<!-- 点击下载 /HNR容器/B.apk -->
+<button class="download-btn" onclick="downloadFile('/HNR容器/B.apk')">下载</button>
+</div>
+</div>
+</div>
+</div>
+
+<script>
+// 触发文件下载的函数
+function downloadFile(filePath) {
+// 创建隐藏的a标签实现下载
+const a = document.createElement('a');
+a.href = filePath;
+a.download = filePath.split('/').pop(); // 自动获取文件名
+a.style.display = 'none';
+document.body.appendChild(a);
+a.click();
+document.body.removeChild(a);
+}
+</script>
+</body>
+</html>
